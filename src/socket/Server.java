@@ -33,6 +33,7 @@ public class Server implements Runnable{
 	private DataInputStream dis;
 	private DataOutputStream dos;
 	ServerGUI testGUI;
+
 	public Server() {
 		 try {
 			testGUI = new ServerGUI();

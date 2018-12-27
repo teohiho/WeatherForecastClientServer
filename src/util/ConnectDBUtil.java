@@ -11,9 +11,9 @@ public class ConnectDBUtil {
 	private String password;
 	
 	public ConnectDBUtil(){
-		this.url="jdbc:mysql://localhost:3306/weatherclientserver?userUnicode=true&characterEncoding=UTF-8";
-		this.username="root";
-		this.password="";
+		this.url="jdbc:mysql://data:data@localhost:3306/defaultdb?userUnicode=true&characterEncoding=UTF-8";
+		this.username="data";
+		this.password="data";
 	}
 	
 	public Connection getConnection(){

@@ -53,7 +53,8 @@ public class Client{
 
 	//-------
 	private Socket socket;
-	private String serverAddress = "192.168.1.73";
+//	private String serverAddress = "localhost";
+	private String serverAddress = "10.4.1.126";
 	private Integer serverPort = 56789;
 	private JButton provinceBTN;
 	private DataInputStream dis;
@@ -81,16 +82,18 @@ public class Client{
 	
 	public  Client() throws IOException {
 		initGUI();
-		addListeners(); 
+		addListeners();
 	}
 	
 	private void initGUI() throws IOException{
+		System.out.println("Init ui begin");
 		frame = new JFrame("Dự báo thời tiết");
 		frame.setSize(550,650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(3, 1));
 		frame.add(SelectPanel());
-		frame.setVisible(true);  
+		frame.setVisible(true);
+		System.out.println("Init ui begin");
 	}
 	
 	private void showWeather (ArrayList<Weather> listWeather) throws IOException {
@@ -138,22 +141,25 @@ public class Client{
    }
 	
 	private void addListeners() {
+		System.out.println("Add listener begin ui begin");
 		showButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// Hide 
-//				showButton.setEnabled(false);
+				System.out.println("Button click");
 				provinceItem = (Province) provinceCBB.getSelectedItem();	
 				//---------------------
 				// #1: khởi tạo client Socket
 				try {
+					System.out.println("Socket init");
 					socket = new Socket(serverAddress, serverPort);
+					System.out.println("Socket" + socket.getInetAddress());
 //					socket.setSoTimeout(1000);
 				} catch(UnknownHostException e) {
 					System.err.println("Không kết nối được với máy chủ: "+ e);
+					e.printStackTrace();
 				} catch (IOException e) {
 					System.err.println("Không thể nạp cổng: "+ serverPort);
-					System.out.println(e);
+					e.printStackTrace();
 				}
 				
 				// #2: tạo luồng để truyền tin
@@ -162,6 +168,7 @@ public class Client{
 					dos = new DataOutputStream(socket.getOutputStream());
 				} catch (IOException e) {
 					System.err.println("Luồng vào/ra bị lỗi: " + e);
+					e.printStackTrace();
 				}
 				
 				// #3: lấy 1 tỉnh từ người dùng, đẩy lên Server
@@ -170,6 +177,7 @@ public class Client{
 					System.out.print("\nĐã đẩy chuỗi lên Server");
 				} catch (IOException e) {
 					System.err.println("Luồng ra bị lỗi: " + e);
+					e.printStackTrace();
 				}
 				
 				// #4: lấy kết quả trả về từ Server, in ra màn hình 
@@ -186,31 +194,11 @@ public class Client{
 				    showWeather(listWeather);
 				} catch (IOException e) {
 					System.err.println("Lỗi:" + e);
+					e.printStackTrace();
 				}
 				
 			}
 		});
-//		resetButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				ArrayList<Weather>listWeather = new ArrayList<Weather>();
-//				try {
-//					Weather weather = new Weather(0,0,0f,0f, "", 0f,0f,0f, "01d", 1591527);
-//					listWeather.add(weather);
-//					listWeather.add(weather);
-//					listWeather.add(weather);
-//					listWeather.add(weather);
-//					listWeather.add(weather);
-//					listWeather.add(weather);
-//					frame.add(weatherCur(listWeather));
-//				    frame.add(weathers(listWeather));
-//				    frame.setVisible(true);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//		});
 	}
 	
 	public JPanel weatherLeft(String name, String date, String desciption, float temp, String icon) throws IOException {
@@ -223,7 +211,7 @@ public class Client{
 		dateLabel.setFont(new Font("Arial",Font.CENTER_BASELINE,17));
 		JLabel desciptionLabel = new JLabel();
 		
-		BufferedImage myPicture = ImageIO.read(new File("D:\\TEO TEO\\STUDY\\TH Lap trinh Mang\\Code\\DoAnMang\\"+icon+".png"));
+		BufferedImage myPicture = ImageIO.read(new File("icons/"+icon+".png"));
 		ImageIcon iconI = new ImageIcon(myPicture);
 		Image scaleImage = iconI.getImage().getScaledInstance(100, 100,Image.SCALE_DEFAULT);
 		JLabel iconLabel = new JLabel(new ImageIcon(scaleImage));
@@ -294,7 +282,7 @@ public class Client{
 		Border border = BorderFactory.createTitledBorder(date);
 		weather4daysPanel.setBorder(border);
 		
-		BufferedImage myPicture = ImageIO.read(new File("D:\\TEO TEO\\STUDY\\TH Lap trinh Mang\\Code\\DoAnMang\\"+image+".png"));
+		BufferedImage myPicture = ImageIO.read(new File("icons/"+image+".png"));
 		ImageIcon icon = new ImageIcon(myPicture);
 		Image scaleImage = icon.getImage().getScaledInstance(50, 50,Image.SCALE_SMOOTH);
 		JLabel iconLabel = new JLabel(new ImageIcon(scaleImage));
